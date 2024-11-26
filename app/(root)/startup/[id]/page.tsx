@@ -43,6 +43,7 @@ const fetchStartupById = unstable_cache(
     tags: ["startup_detail"],
   }
 );
+console.log("Hello");
 
 export default async function Page({
   params,
