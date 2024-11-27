@@ -5,6 +5,7 @@ import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
 import { Author, Startup } from "@prisma/client";
+import { Skeleton } from "./ui/skeleton";
 
 // We can add another key to the existing type
 // It uses the Startup Type without the Type author key in it and then add the property of author into it which is optional
@@ -17,9 +18,7 @@ export default function StartupCard({ post }: { post: StarupCardType }) {
   return (
     <li className="startup-card group">
       <div className="flex-between">
-        <p className="startup-card_date">
-          {formatDate(createdAt.toString())}
-        </p>
+        <p className="startup-card_date">{formatDate(createdAt.toString())}</p>
 
         <div className="flex gap-1.5">
           <EyeIcon className="size-6 text-primary" />
@@ -65,3 +64,13 @@ export default function StartupCard({ post }: { post: StarupCardType }) {
     </li>
   );
 }
+
+export const StartupCardSkeleton = () => (
+  <>
+    {[0, 1, 2, 3, 4].map((index: number) => (
+      <li key={index}>
+        <Skeleton className="startup-card_skeleton" />
+      </li>
+    ))}
+  </>
+);

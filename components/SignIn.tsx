@@ -1,6 +1,7 @@
 import { signIn, signOut } from "@/auth";
 import React from "react";
 import { Button } from "./ui/button";
+import { LogOut } from "lucide-react";
 
 export default function AuthSignInSignOutFormBtn({
   btnText,
@@ -14,7 +15,16 @@ export default function AuthSignInSignOutFormBtn({
       }}
     >
       <Button className="bg-white shadow-none hover:bg-inherit">
-        <span className="text-primary font-semibold">{btnText}</span>
+        <span
+          className={`text-primary font-semibold ${
+            btnText === "Logout" ? "hidden md:block" : ""
+          }`}
+        >
+          {btnText}
+        </span>
+        {btnText === "Logout" && (
+          <LogOut className={`size-6 text-red-500 md:hidden`} />
+        )}
       </Button>
     </form>
   );

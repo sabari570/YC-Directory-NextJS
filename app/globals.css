@@ -20,7 +20,7 @@ inorder to keep on repeating the styles over and over again
   }
 
   .text-30-extrabold {
-    @apply text-[30px] font-extrabold text-white;
+    @apply text-[15px] font-extrabold text-white lg:text-[20px];
   }
 
   .text-30-bold {

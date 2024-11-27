@@ -7,8 +7,7 @@ import markdownit from "markdown-it";
 import { Skeleton } from "@/components/ui/skeleton";
 import View from "@/components/View";
 import { unstable_cache } from "next/cache";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import StartupCard from "@/components/StartupCard";
 
 // This is given inorder to tell NextJS that this page requires partial pre-rendering
 // where only some components of the UI needs to be dynamically updated where others are cached
@@ -43,7 +42,27 @@ const fetchStartupById = unstable_cache(
     tags: ["startup_detail"],
   }
 );
-console.log("Hello");
+
+// Function to fetch the startups belonging to the playlists
+const fetchStartupsFromPlaylists = async () => {
+  try {
+    return await prisma.playlist.findMany({
+      include: {
+        startups: {
+          include: {
+            startup: {
+              include: {
+                author: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log("Error while fetching playlist startups: ", error);
+  }
+};
 
 export default async function Page({
   params,
@@ -51,7 +70,13 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const id = (await params).id;
-  const startup = isNaN(Number(id)) ? null : await fetchStartupById(id);
+
+  // Fetch multiple api calls or database fetch calls in a page like this way inorder to reduce the fetch time
+  // and to optimize the apps performance
+  const [startup, fetchedPlaylistStartups] = await Promise.all([
+    isNaN(Number(id)) ? null : fetchStartupById(id),
+    fetchStartupsFromPlaylists(),
+  ]);
 
   // This is where we render the pitch using markdownit,
   // The parsedPitch contains only html tags in it
@@ -118,11 +143,27 @@ export default async function Page({
 
         <hr className="divider" />
 
-        {/* TODO: EDITOR SELCETED STARTUPS */}
+        {/* THIS IS A DYNAMIC CONTENT THAT KEEPS CHANGING ON EACH REQUEST*/}
+        <Suspense fallback={<Skeleton className="view_skeleton" />}>
+          {fetchedPlaylistStartups &&
+            fetchedPlaylistStartups.map((playlistItem, index: number) => {
+              return (
+                <div key={index} className="mt-5 flex-1 flex flex-col gap-3">
+                  <p className="text-30-bold">{playlistItem.title}</p>
+
+                  <ul className="card_grid-sm">
+                    {playlistItem.startups.map((startup, index) => (
+                      <StartupCard key={index} post={startup.startup} />
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+        </Suspense>
 
         {/* THIS IS THE DYNAMIC CONTENT OF THIS PAGE, REMAINING COMPONENT REMAINS STATIS */}
         {/* WHENEVER YOU WANT ANY DYNAMIC CONTENT IN A PPR PAGE YOU WRAP IT INSIDE A SUSPENSE TAG */}
-        <Suspense fallback={<Skeleton className="" />}>
+        <Suspense fallback={<Skeleton className="view_skeleton" />}>
           {/* Here is the code that renders dynamically */}
           <View id={id} />
         </Suspense>

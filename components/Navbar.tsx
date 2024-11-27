@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import AuthSignInSignOutFormBtn from "./SignIn";
+import { BadgePlus } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 // We can make the component async because this is a server side component
 export default async function Navbar() {
@@ -12,7 +14,7 @@ export default async function Navbar() {
   // And declare a module in it by modifying the session type only then that error will be gone
   console.log("session obtained: ", session?.id);
   return (
-    <header className="sticky top-0 px-5 py-3 bg-white shadow-sm font-work-sans">
+    <header className="z-20 sticky top-0 px-5 py-3 bg-white shadow-sm font-work-sans">
       <nav className="flex justify-between items-center">
         <Link href="/">
           <Image
@@ -27,15 +29,24 @@ export default async function Navbar() {
           {session && session?.user ? (
             <>
               <Link href="/startup/create">
-                <span className="text-black font-semibold">Create</span>
+                <span className="text-black font-semibold hidden md:block">
+                  Create
+                </span>
+                <BadgePlus className="size-6 md:hidden" />
               </Link>
 
               <AuthSignInSignOutFormBtn btnText="Logout" authAction="signout" />
 
-              <Link href={`/user`}>
-                <span className="text-black font-semibold">
-                  {session?.user?.name}
-                </span>
+              <Link href={`/user/${session.id}`}>
+                <Avatar>
+                  <Image
+                    src={session?.user?.image ?? ""}
+                    alt={session?.user?.name ?? ""}
+                    width={50}
+                    height={50}
+                  />
+                  <AvatarFallback>AV</AvatarFallback>
+                </Avatar>
               </Link>
             </>
           ) : (

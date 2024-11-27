@@ -12,3 +12,13 @@ export function formatDate(date: string) {
     year: "numeric",
   });
 }
+
+// This is a custom function created to parse all the server responses
+export function parseServerActionResponse<T>(response: T) {
+  return JSON.parse(JSON.stringify(response));
+}
+
+export enum RESPONSE_STATUS {
+  ERROR,
+  SUCCESS,
+}
