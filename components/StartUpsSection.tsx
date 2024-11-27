@@ -6,6 +6,7 @@ import { unstable_cache } from "next/cache";
 // This is a function written to demonstarte the concept of data fetching and caching in NextJS
 // This function wil first fetch the data and cache it for 60 seconds that means for the first 60 seconds after fetching
 // the data will be cached only after 60 seconds it will refetch the new data
+/**
 const fetchStartups = unstable_cache(
   async (query?: string) => {
     return await prisma.startup.findMany({
@@ -36,6 +37,8 @@ const fetchStartups = unstable_cache(
   ["startups"],
   { revalidate: 60, tags: ["startups"] }
 );
+
+ */
 
 export default async function StartUpsSection({
   query,

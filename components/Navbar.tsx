@@ -1,10 +1,10 @@
-import { auth, signIn, signOut } from "@/auth";
+import { auth } from "@/auth";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import AuthSignInSignOutFormBtn from "./SignIn";
 import { BadgePlus } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 // We can make the component async because this is a server side component
 export default async function Navbar() {
