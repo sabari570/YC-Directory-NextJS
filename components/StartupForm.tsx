@@ -150,7 +150,7 @@ export default function StartupForm() {
           render={({ field }) => (
             <MarkdownEditor
               {...field}
-              height={300}
+              height={"300"}
               style={{ borderRadius: 20, overflow: "hidden" }}
               placeholder="Briefly describe your idea and what problem it solves"
             />
