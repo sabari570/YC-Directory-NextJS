@@ -7,7 +7,11 @@ import React, { Suspense } from "react";
 
 export const experimental_ppr = true;
 
-export default async function page({ params }: { params: { id: string } }) {
+export default async function page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const id = (await params).id;
   const session = await auth();
 
